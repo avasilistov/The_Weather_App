@@ -15,10 +15,12 @@ import android.view.ViewGroup;
 
 import com.demo.theweather.R;
 import com.demo.theweather.contracts.DailyContract;
-import com.demo.theweather.network.pojo.Day;
+import com.demo.theweather.network.pojo.DailyForecast;
+import com.demo.theweather.network.pojo.Hour;
 import com.demo.theweather.presenters.DailyPresenter;
-import com.demo.theweather.presenters.HourlyPresenter;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,6 +28,7 @@ public class DailyFragment extends Fragment implements DailyContract.View {
     private SharedPreferences preferences;
     private DailyPresenter dailyPresenter = new DailyPresenter(this);
     private static final String TAG = "DailyFragment1";
+    private final String PATH = "https://developer.accuweather.com/sites/default/files/";
 
     public DailyFragment() {}
 
@@ -58,12 +61,38 @@ public class DailyFragment extends Fragment implements DailyContract.View {
     }
 
     @Override
-    public void setDailyList(List<Day> listD) {
+    public void setDailyList(List<DailyForecast> listD) {
+        listD = addIconPath(listD);
 
+    }
+
+    private List<DailyForecast> addIconPath(List<DailyForecast> hourList){
+        ArrayList<DailyForecast> tempList = new ArrayList<>();
+        String tempPathDay = "";
+        String tempPathNight = "";
+        for (DailyForecast day : hourList) {
+            tempPathDay = day.getDay().getIcon();
+            tempPathNight = day.getNight().getIcon();
+            if (Integer.valueOf(tempPathDay) < 10) {
+
+                tempPathDay = PATH + "0" + tempPathDay + "-s.png";
+                tempPathNight = PATH + "0" + tempPathNight + "-s.png";
+            } else {
+                tempPathDay = PATH + tempPathDay + "-s.png";
+                tempPathNight = PATH + tempPathNight + "-s.png";
+            }
+
+            day.getDay().setIcon(tempPathDay);
+            day.getNight().setIcon(tempPathNight);
+            tempList.add(day);
+        }
+        return tempList;
     }
 
     @Override
     public void onError() {
-
+        Snackbar.make(getActivity().findViewById(R.id.daily_fragment), R.string.cant_determine_location, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.ok, view -> {
+                }).show();
     }
 }

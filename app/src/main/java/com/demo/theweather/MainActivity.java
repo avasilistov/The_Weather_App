@@ -25,6 +25,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.demo.theweather.contracts.MainContract;
+import com.demo.theweather.fragments.DailyFragment;
 import com.demo.theweather.fragments.HourlyFragment;
 import com.demo.theweather.presenters.MainPresenter;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -171,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     protected void onStart() {
         super.onStart();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.host_fragment, HourlyFragment.class, null)
+                .add(R.id.host_fragment, DailyFragment.class, null)
                 .setReorderingAllowed(true).commit();
 
     }

@@ -1,15 +1,8 @@
 package com.demo.theweather.presenters;
 
-import android.util.Log;
-
 import com.demo.theweather.contracts.DailyContract;
-import com.demo.theweather.contracts.HourlyContract;
-import com.demo.theweather.contracts.MainContract;
 import com.demo.theweather.model.DailyRepository;
-import com.demo.theweather.model.HourlyRepository;
-import com.demo.theweather.model.MainRepository;
-import com.demo.theweather.network.pojo.Day;
-import com.demo.theweather.network.pojo.Hour;
+import com.demo.theweather.network.pojo.DailyForecast;
 
 import java.util.List;
 
@@ -41,7 +34,7 @@ public class DailyPresenter implements DailyContract.Presenter, DailyRepository.
     }
 
     @Override
-    public void setDailyList(List<Day> listD) {
+    public void setDailyList(List<DailyForecast> listD) {
         view.setDailyList(listD);
     }
 }

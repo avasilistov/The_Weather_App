@@ -4,10 +4,9 @@ import android.util.Log;
 
 import com.demo.theweather.contracts.DailyContract;
 import com.demo.theweather.network.NetworkClient;
-import com.demo.theweather.network.pojo.City;
 import com.demo.theweather.network.WeatherService;
-import com.demo.theweather.network.pojo.Day;
-import com.demo.theweather.network.pojo.Hour;
+import com.demo.theweather.network.pojo.DailyForecast;
+import com.demo.theweather.network.pojo.DailyForecastList;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class DailyRepository implements DailyContract.Repository {
     private static final String IS_METRIC = "true";
 
     public interface Callback {
-        void setDailyList(List<Day> listD);
+        void setDailyList(List<DailyForecast> listD);
     }
 
 
@@ -32,22 +31,23 @@ public class DailyRepository implements DailyContract.Repository {
     public void getDailyList(String locationKey) {
 
         WeatherService apiService = NetworkClient.getClient().create(WeatherService.class);
-        Call<List<Day>> call = apiService.getDays(locationKey, NetworkClient.API_KEY);
+        Call<DailyForecastList> call = apiService.getDays(locationKey, NetworkClient.API_KEY, IS_METRIC);
 
-        call.enqueue(new retrofit2.Callback<List<Day>>() {
+        call.enqueue(new retrofit2.Callback<DailyForecastList>() {
             @Override
-            public void onResponse(Call<List<Day>> call, Response<List<Day>> response) {
-
+            public void onResponse(Call<DailyForecastList> call, Response<DailyForecastList> response) {
+                Log.i(TAG, "onResponse: "+ response.body());
                 if (response.isSuccessful() && response.body() != null ) {
-                    List<Day> dayList = response.body();
+                    List<DailyForecast> dayList = response.body().getDailyForecasts();
                     callback.setDailyList(dayList);
                 }
 
             }
 
             @Override
-            public void onFailure(Call<List<Day>> call, Throwable t) {
-
+            public void onFailure(Call<DailyForecastList> call, Throwable t) {
+                Log.i(TAG, "onFailure: ");
+                Log.i(TAG, "onFailure: "+call.request().url());
                 t.printStackTrace();
             }
         });

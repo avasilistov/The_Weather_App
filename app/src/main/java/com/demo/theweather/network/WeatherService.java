@@ -1,9 +1,9 @@
 package com.demo.theweather.network;
 
 import com.demo.theweather.network.pojo.City;
-import com.demo.theweather.network.pojo.Day;
+import com.demo.theweather.network.pojo.DailyForecast;
+import com.demo.theweather.network.pojo.DailyForecastList;
 import com.demo.theweather.network.pojo.Hour;
-import com.demo.theweather.network.pojo.HoursList;
 
 import java.util.List;
 
@@ -26,6 +26,6 @@ public interface WeatherService {
     Call<List<Hour>> getHours(@Path("locationKey") String locationKey, @Query("apikey") String apikey, @Query("metric") String metric);
 
     @GET("forecasts/v1/daily/5day/{locationKey}")
-    Call<List<Day>> getDays(@Path("locationKey") String locationKey, @Query("apikey") String apikey);
+    Call<DailyForecastList> getDays(@Path("locationKey") String locationKey, @Query("apikey") String apikey, @Query("metric") String metric);
 }
 

@@ -2,7 +2,7 @@ package com.demo.theweather.network.pojo;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Day {
+public class Night {
     @SerializedName("Icon")
     private String icon;
 
@@ -28,5 +28,6 @@ public class Day {
     public Boolean getHasPrecipitation() {
         return hasPrecipitation;
     }
+
 
 }

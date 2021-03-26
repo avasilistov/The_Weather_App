@@ -89,7 +89,7 @@ public class HourlyFragment extends Fragment implements HourlyContract.View {
 
     @Override
     public void onError() {
-        Snackbar.make(getActivity().findViewById(R.id.daily_fragment), R.string.cant_determine_location, Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(getActivity().findViewById(R.id.hourly_fragment), R.string.cant_determine_location, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.ok, view -> {
                 }).show();
     }
