@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    android:elevation="4dp"
+    app:cardCornerRadius="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:background="@color/blue"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@color/blue"
+        android:padding="2dp">
+
+        <ImageView
+            android:layout_height="35dp"
+            android:layout_width="35dp"
+            android:src="@mipmap/ic_launcher_round"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/img_view_daily_forecast_item_icon"
+            android:contentDescription="@string/no" />
+
+        <TextView
+            android:id="@+id/text_view_daily_forecast_item_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/blue"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_toEndOf="@+id/img_view_daily_forecast_item_icon"
+            android:gravity="center_vertical"
+            android:text="@string/today"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_view_daily_forecast_item_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/white"
+            android:layout_toEndOf="@+id/text_view_daily_forecast_item_day"
+            android:text="@string/point"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/text_view_daily_forecast_item_phrase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/white"
+            android:layout_toEndOf="@+id/text_view_daily_forecast_item_point"
+            android:text="@string/clever"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/text_view_daily_forecast_item_temp_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/white"
+            android:layout_toEndOf="@+id/text_view_daily_forecast_item_phrase"
+            android:text="@string/_2"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/text_view_daily_forecast_item_slash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/white"
+            android:layout_toEndOf="@+id/text_view_daily_forecast_item_temp_max"
+            android:text="@string/slash"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/text_view_daily_forecast_item_temp_min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/white"
+            android:layout_toEndOf="@+id/text_view_daily_forecast_item_slash"
+            android:text="@string/_2"
+            android:textSize="25sp" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

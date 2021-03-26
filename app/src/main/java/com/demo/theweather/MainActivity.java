@@ -126,6 +126,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         }
         //End Check permissions and location
 
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.daily_fragment, DailyFragment.class, null)
+                    .setReorderingAllowed(true).commit();
+        }
 
     }
 
@@ -171,9 +176,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     protected void onStart() {
         super.onStart();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.host_fragment, DailyFragment.class, null)
-                .setReorderingAllowed(true).commit();
+
 
     }
 

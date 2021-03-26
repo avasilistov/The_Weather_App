@@ -13,5 +13,11 @@
     <string name="cant_determine_location">Can\'t determine location</string>
     <string name="cant_determine_location_fused">cant determine fused</string>
     <string name="cant_determine_location_gps">Can\'t detemine location gps</string>
+    <string name="_2">-2</string>
+    <string name="clear">Clear</string>
+    <string name="point">•</string>
+    <string name="today">Today</string>
+    <string name="clever">Clever</string>
+    <string name="slash">/</string>
 
 </resources>
