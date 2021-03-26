@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">The Weather</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="permission_rationale">This App needs location permission</string>
+    <string name="ok">OK</string>
+    <string name="permission_denied_explanation">Sorry, can\'t to determine your location </string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="enable_gps">Enable GPS</string>
+    <string name="location_access_denyed">Location access denyed</string>
+    <string name="location_access_required">Need an location access</string>
+    <string name="cant_determine_location">Can\'t determine location</string>
+    <string name="cant_determine_location_fused">cant determine fused</string>
+    <string name="cant_determine_location_gps">Can\'t detemine location gps</string>
+
+</resources>
