@@ -1,5 +1,6 @@
 package com.demo.theweather.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,8 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.demo.theweather.R;
 import com.demo.theweather.network.pojo.Hour;
 
@@ -17,9 +20,11 @@ import java.util.List;
 
 public class DailyRecyclerAdapter extends RecyclerView.Adapter<DailyRecyclerAdapter.MyHolder> {
     List<Hour> data;
+    Context context;
 
-    public DailyRecyclerAdapter(List<Hour> data) {
+    public DailyRecyclerAdapter(List<Hour> data, Context context) {
         this.data = data;
+        this.context = context;
     }
 
     @NonNull
@@ -31,7 +36,7 @@ public class DailyRecyclerAdapter extends RecyclerView.Adapter<DailyRecyclerAdap
 
     @Override
     public void onBindViewHolder(@NonNull DailyRecyclerAdapter.MyHolder holder, int position) {
-        Picasso
+        Glide.with(context).load(data.get(position).getWeatherIcon()).into(holder.icon);
         holder.date.setText(data.get(position).getDateTime());
         holder.iconPhrase.setText(data.get(position).getIconPhrase());
         holder.maxTemp.setText(data.get(position).getTemperature().getValue());
