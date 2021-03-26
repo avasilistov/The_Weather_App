@@ -6,16 +6,21 @@ import com.demo.theweather.contracts.DailyContract;
 import com.demo.theweather.network.NetworkClient;
 import com.demo.theweather.network.pojo.City;
 import com.demo.theweather.network.WeatherService;
+import com.demo.theweather.network.pojo.Day;
+import com.demo.theweather.network.pojo.Hour;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
 
 public class DailyRepository implements DailyContract.Repository {
     private final DailyRepository.Callback callback;
-    private static final String TAG = "MainRepository1";
+    private static final String TAG = "HourlyRepository1";
+    private static final String IS_METRIC = "true";
 
     public interface Callback {
-        void setDailyList(String locationKey);
+        void setDailyList(List<Day> listD);
     }
 
 
@@ -24,28 +29,25 @@ public class DailyRepository implements DailyContract.Repository {
     }
 
     @Override
-    public void getLocationKey(String location) {
-        Log.i(TAG, "getLocationKey: enter");
+    public void getDailyList(String locationKey) {
+
         WeatherService apiService = NetworkClient.getClient().create(WeatherService.class);
-        Call<City> call = apiService.searchCity(NetworkClient.API_KEY, location);
-        call.enqueue(new retrofit2.Callback<City>() {
+        Call<List<Day>> call = apiService.getDays(locationKey, NetworkClient.API_KEY);
+
+        call.enqueue(new retrofit2.Callback<List<Day>>() {
             @Override
-            public void onResponse(Call<City> call, Response<City> response) {
-                Log.i(TAG, "onResponse: response.isSuccessful() "+response.isSuccessful());
-                Log.i(TAG, "onResponse: response.body() "+response.body());
+            public void onResponse(Call<List<Day>> call, Response<List<Day>> response) {
 
                 if (response.isSuccessful() && response.body() != null ) {
-                    String locationKey = response.body().getKey();
-                    Log.i(TAG, "onResponse: "+locationKey);
-                    Log.i(TAG, "onResponse: "+ response.body().getLocalizedName());
-//                    callback.setLocationKey(locationKey);
+                    List<Day> dayList = response.body();
+                    callback.setDailyList(dayList);
                 }
 
             }
 
             @Override
-            public void onFailure(Call<City> call, Throwable t) {
-                Log.i(TAG, "onFailure: ");
+            public void onFailure(Call<List<Day>> call, Throwable t) {
+
                 t.printStackTrace();
             }
         });

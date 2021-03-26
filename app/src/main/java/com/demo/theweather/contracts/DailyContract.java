@@ -1,9 +1,15 @@
 package com.demo.theweather.contracts;
 
+import com.demo.theweather.network.pojo.Day;
+import com.demo.theweather.network.pojo.Hour;
+
+import java.util.List;
+
 public interface DailyContract {
     public interface View {
-        String getLocation();
-        void setLocationKey(String locationKey);
+        String getLocationKey();
+        void setDailyList(List<Day> listD);
+        void onError();
     }
 
     public interface Presenter {
@@ -12,6 +18,6 @@ public interface DailyContract {
     }
 
     interface Repository {
-        void getLocationKey(String location);
+        void getDailyList(String locationKey);
     }
 }

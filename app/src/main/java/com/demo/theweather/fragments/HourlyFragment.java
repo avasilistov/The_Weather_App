@@ -19,6 +19,7 @@ import com.demo.theweather.network.pojo.Hour;
 import com.demo.theweather.presenters.HourlyPresenter;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,6 +27,7 @@ public class HourlyFragment extends Fragment implements HourlyContract.View {
     private SharedPreferences preferences;
     private HourlyPresenter hourlyPresenter = new HourlyPresenter(this);
     private static final String TAG = "HourlyFragment1";
+    private final String PATH = "https://developer.accuweather.com/sites/default/files/";
 
     public HourlyFragment() {}
 
@@ -53,6 +55,24 @@ public class HourlyFragment extends Fragment implements HourlyContract.View {
 
     }
 
+    private List<Hour> addIconPath(List<Hour> hourList){
+        ArrayList<Hour> tempList = new ArrayList<>();
+        String tempPath = "";
+        for (Hour hour : hourList) {
+            tempPath = hour.getWeatherIcon();
+            if (Integer.valueOf(tempPath) < 10) {
+
+                tempPath = PATH + "0" + tempPath + "-s.png";
+            } else {
+                tempPath = PATH + tempPath + "-s.png";
+            }
+            Log.i(TAG, "setWeatherIcon: " + tempPath);
+            hour.setWeatherIcon(tempPath);
+            tempList.add(hour);
+        }
+        return tempList;
+    }
+
     @Override
     public String getLocationKey() {
         String locationKey = preferences.getString("locationKey", null);
@@ -63,9 +83,8 @@ public class HourlyFragment extends Fragment implements HourlyContract.View {
 
     @Override
     public void setHourlyList(List<Hour> listH) {
-        for (Hour hour : listH ){
-            
-        }
+        listH = addIconPath(listH);
+
     }
 
     @Override

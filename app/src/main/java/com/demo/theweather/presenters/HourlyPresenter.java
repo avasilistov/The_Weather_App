@@ -22,7 +22,7 @@ public class HourlyPresenter implements HourlyContract.Presenter, HourlyReposito
     @Override
     public void init() {
         String key = view.getLocationKey();
-        Log.i(TAG, "init: "+key);
+
         if (key!=null) {
             repository.getHourlyList(key);
         } else {

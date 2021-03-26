@@ -1,13 +1,23 @@
 package com.demo.theweather.network.pojo;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
 public class Hour {
+    private static final String TAG = "Hour";
+
+
     @SerializedName("DateTime")
     private String dateTime;
 
+
+    public void setWeatherIcon(String weatherIcon) {
+        this.weatherIcon = weatherIcon;
+    }
+
     @SerializedName("WeatherIcon")
-    private Integer weatherIcon;
+    private String weatherIcon;
 
     @SerializedName("IconPhrase")
     private String iconPhrase;
@@ -29,7 +39,7 @@ public class Hour {
     }
 
 
-    public Integer getWeatherIcon() {
+    public String getWeatherIcon() {
         return weatherIcon;
     }
 
