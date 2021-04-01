@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.cardview.widget.CardView
+<androidx.cardview.widget.CardView xmlns:tools="http://schemas.android.com/tools"
     android:elevation="4dp"
     app:cardCornerRadius="5dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,110 +10,134 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <RelativeLayout
-        android:layout_height="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:layout_height="45dp"
         android:background="@color/blue"
         android:padding="2dp">
 
         <ImageView
-            android:layout_height="35dp"
+            android:id="@+id/img_view_daily_forecast_item_icon"
             android:layout_width="35dp"
-            android:src="@mipmap/ic_launcher_round"
+            android:layout_height="35dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginStart="30dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:id="@+id/img_view_daily_forecast_item_icon"
-            android:contentDescription="@string/no" />
+            android:contentDescription="@string/no"
+            android:src="@mipmap/ic_launcher_round"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/text_view_daily_forecast_item_day"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_alignParentTop="true"
-            android:background="@color/blue"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_toEndOf="@+id/img_view_daily_forecast_item_icon"
+            android:background="@color/blue"
             android:gravity="center_vertical"
             android:text="@string/today"
             android:textColor="@color/white"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/text_view_daily_forecast_item_point"
+            app:layout_constraintStart_toEndOf="@+id/img_view_daily_forecast_item_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.518" />
 
         <TextView
             android:id="@+id/text_view_daily_forecast_item_point"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
+            android:layout_height="0dp"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:textColor="@color/white"
             android:layout_toEndOf="@+id/text_view_daily_forecast_item_day"
+            android:background="@color/blue"
+            android:gravity="center_vertical"
             android:text="@string/point"
-            android:textSize="25sp" />
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/text_view_daily_forecast_item_phrase"
+            app:layout_constraintStart_toEndOf="@+id/text_view_daily_forecast_item_day"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/text_view_daily_forecast_item_phrase"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
+            android:layout_height="0dp"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:textColor="@color/white"
+            android:layout_marginStart="4dp"
             android:layout_toEndOf="@+id/text_view_daily_forecast_item_point"
+            android:background="@color/blue"
+            android:gravity="center_vertical"
             android:text="@string/clever"
-            android:textSize="25sp" />
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/text_view_daily_forecast_item_point"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.518" />
 
         <TextView
             android:id="@+id/text_view_daily_forecast_item_temp_max"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
+            android:layout_height="0dp"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:textColor="@color/white"
+            android:layout_marginStart="250dp"
             android:layout_toEndOf="@+id/text_view_daily_forecast_item_phrase"
+            android:background="@color/blue"
+            android:gravity="center_vertical"
             android:text="@string/_2"
-            android:textSize="25sp" />
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/img_view_daily_forecast_item_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/text_view_daily_forecast_item_slash"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
+            android:layout_height="0dp"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:textColor="@color/white"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_toEndOf="@+id/text_view_daily_forecast_item_temp_max"
+            android:background="@color/blue"
+            android:gravity="center_vertical"
             android:text="@string/slash"
-            android:textSize="25sp" />
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/text_view_daily_forecast_item_temp_min"
+            app:layout_constraintStart_toEndOf="@+id/text_view_daily_forecast_item_temp_max"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.481" />
 
         <TextView
             android:id="@+id/text_view_daily_forecast_item_temp_min"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
+            android:layout_height="0dp"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:textColor="@color/white"
+            android:layout_marginEnd="8dp"
             android:layout_toEndOf="@+id/text_view_daily_forecast_item_slash"
+            android:background="@color/blue"
+            android:gravity="center_vertical"
             android:text="@string/_2"
-            android:textSize="25sp" />
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/text_view_daily_forecast_item_temp_max"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.481" />
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

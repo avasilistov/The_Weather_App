@@ -1,33 +1,33 @@
 package com.demo.theweather.fragments;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.SavedStateViewModelFactory;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.demo.theweather.R;
-import com.demo.theweather.contracts.HourlyContract;
+import com.demo.theweather.mvvm.WeatherViewModel;
 import com.demo.theweather.network.pojo.Hour;
-import com.demo.theweather.presenters.HourlyPresenter;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
-public class HourlyFragment extends Fragment implements HourlyContract.View {
+public class HourlyFragment extends Fragment {
+    private WeatherViewModel weatherViewModel;
     private SharedPreferences preferences;
-    private HourlyPresenter hourlyPresenter = new HourlyPresenter(this);
+
     private static final String TAG = "HourlyFragment1";
-    private final String PATH = "https://developer.accuweather.com/sites/default/files/";
+
 
     public HourlyFragment() {}
 
@@ -50,44 +50,23 @@ public class HourlyFragment extends Fragment implements HourlyContract.View {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        preferences = getContext().getSharedPreferences("location", Context.MODE_PRIVATE);
-        hourlyPresenter.init();
+        weatherViewModel = new ViewModelProvider(this,
+                new SavedStateViewModelFactory(requireActivity().getApplication(), this))
+                .get(WeatherViewModel.class);
 
-    }
+        weatherViewModel.getListHoursWeather().observe(getViewLifecycleOwner(), hourList -> {
+            if (hourList!=null){
 
-    private List<Hour> addIconPath(List<Hour> hourList){
-        ArrayList<Hour> tempList = new ArrayList<>();
-        String tempPath = "";
-        for (Hour hour : hourList) {
-            tempPath = hour.getWeatherIcon();
-            if (Integer.valueOf(tempPath) < 10) {
-
-                tempPath = PATH + "0" + tempPath + "-s.png";
-            } else {
-                tempPath = PATH + tempPath + "-s.png";
+                //TODO
             }
-            Log.i(TAG, "setWeatherIcon: " + tempPath);
-            hour.setWeatherIcon(tempPath);
-            tempList.add(hour);
-        }
-        return tempList;
+
+        });
+        weatherViewModel.getLocation().observe(getViewLifecycleOwner(), cityName ->
+        {
+//            if (cityName != null) txtCityName.setText(cityName);
+        });
     }
 
-    @Override
-    public String getLocationKey() {
-        String locationKey = preferences.getString("locationKey", null);
-        Log.i(TAG, "getLocationKey: "+locationKey);
-        if (locationKey != null) return locationKey;
-        return null;
-    }
-
-    @Override
-    public void setHourlyList(List<Hour> listH) {
-        listH = addIconPath(listH);
-
-    }
-
-    @Override
     public void onError() {
         Snackbar.make(getActivity().findViewById(R.id.hourly_fragment), R.string.cant_determine_location, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.ok, view -> {

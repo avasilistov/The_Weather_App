@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class Maximum {
     @SerializedName("Value")
-    private Double value;
+    private String value;
     @SerializedName("Unit")
     private String unit;
     @SerializedName("UnitType")
     private Integer unitType;
 
-    public Double getValue() {
+    public String getValue() {
         return value;
     }
 

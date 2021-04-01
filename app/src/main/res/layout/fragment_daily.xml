@@ -5,6 +5,8 @@
     android:id="@+id/daily_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    android:background="@color/blue"
     tools:context=".fragments.DailyFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,15 +14,32 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/text_view_daily_center_temp"
+            android:id="@+id/text_view_daily_city_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/_2"
-            android:textSize="150dp"
-            app:layout_constraintBottom_toTopOf="@+id/text_view_daily_center_phrase"
+
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/text_view_daily_center_temp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_view_daily_center_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="68dp"
+            android:text="@string/_2"
+
+            android:textColor="@color/white"
+            android:textSize="150sp"
+            app:layout_constraintBottom_toTopOf="@+id/text_view_daily_center_phrase"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.529"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.135" />
 
         <TextView
             android:id="@+id/text_view_daily_center_phrase"
@@ -28,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="112dp"
             android:text="@string/clear"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/button_daily_more"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.51"
@@ -43,11 +63,30 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_daily"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="135dp"
             android:layout_margin="16dp"
+            android:scrollbarSize="5dp"
+            android:scrollbarThumbVertical="@android:color/darker_gray"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/text_view_daily_fragment_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="68dp"
+            android:text="@string/unit"
+            android:textColor="@color/white"
+            android:textSize="50sp"
+            app:layout_constraintBottom_toTopOf="@+id/text_view_daily_center_phrase"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/text_view_daily_center_temp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.048" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

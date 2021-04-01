@@ -6,6 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -24,10 +28,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.demo.theweather.contracts.MainContract;
-import com.demo.theweather.fragments.DailyFragment;
-import com.demo.theweather.fragments.HourlyFragment;
-import com.demo.theweather.presenters.MainPresenter;
+import com.demo.theweather.adapters.PAdapter;
+import com.demo.theweather.mvvm.WeatherViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.CancellationTokenSource;
@@ -36,7 +38,7 @@ import com.google.android.material.snackbar.Snackbar;
 import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
 
 
-public class MainActivity extends AppCompatActivity implements MainContract.View {
+public class MainActivity extends AppCompatActivity  {
     private NetworkCallback networkCallback;
     private static final String TAG = "MainActivity1";
     private ConnectivityManager connectivityManager;
@@ -46,15 +48,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private FusedLocationProviderClient fusedLocationClient;
     private CancellationTokenSource cancellationTokenSource;
     private SharedPreferences preferences;
-    private MainContract.Presenter mainPresenter;
+    private ViewPager2 viewPager;
+    private FragmentStateAdapter pagerAdapter;
+    private WeatherViewModel weatherViewModel;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
 
     private final ActivityResultLauncher<Intent> gpsActivityResultLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
                     result -> {
-
                         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-
                             requestLocation();
                         } else {
                             makeToast(R.string.cant_determine_location);
@@ -76,7 +80,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mainPresenter = new MainPresenter(this);
+        swipeRefreshLayout = findViewById(R.id.swiperefresh);
+        weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
+        viewPager = findViewById(R.id.pager);
+        pagerAdapter = new PAdapter(this);
+        viewPager.setAdapter(pagerAdapter);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         cancellationTokenSource = new CancellationTokenSource();
         locationManager = (LocationManager)
@@ -104,6 +112,21 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         // End check connection
 
         // Check permissions and location
+        if (savedInstanceState == null) {
+            checkPermissions();
+        }
+        //End Check permissions and location
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                checkPermissions();
+            }
+        });
+
+
+    }
+
+    private void checkPermissions() {
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             turnOnGps();
         } else {
@@ -124,15 +147,21 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                         Manifest.permission.ACCESS_FINE_LOCATION);
             }
         }
-        //End Check permissions and location
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.daily_fragment, DailyFragment.class, null)
-                    .setReorderingAllowed(true).commit();
-        }
-
     }
+
+    @Override
+    public void onBackPressed() {
+        if (viewPager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        } else {
+            // Otherwise, select the previous step.
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        }
+    }
+
+
 
     private void turnOnGps() {
         new AlertDialog.Builder(this)
@@ -147,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @SuppressLint("MissingPermission")
     private void requestLocation() {
-
+        Log.i(TAG, "requestLocation: start requesting location");
         fusedLocationClient.getCurrentLocation(PRIORITY_HIGH_ACCURACY, cancellationTokenSource.getToken())
                 .addOnCompleteListener(task -> {
 
@@ -158,7 +187,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                                 "," +
                                 location.getLongitude();
                         preferences.edit().putString("location", stringLocation).commit();
-                        mainPresenter.init();
+
+                        // start recieving weather data
+                        weatherViewModel.setCoordinates(stringLocation);
 
                     } else {
                         makeToast(R.string.cant_determine_location_fused);
@@ -203,24 +234,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mainPresenter.onDestroy();
+
 
     }
 
-
-    @Override
-    public String getLocation() {
-        preferences = getSharedPreferences("location", MODE_PRIVATE);
-        if (preferences != null && preferences.getString("location", null) !=null) {
-            return preferences.getString("location", null);
-        }
-        return null;
-    }
-
-    @Override
-    public void setLocationKey(String locationKey) {
-        preferences = getSharedPreferences("location", MODE_PRIVATE);
-        preferences.edit().putString("locationKey", locationKey).commit();
-
-    }
 }

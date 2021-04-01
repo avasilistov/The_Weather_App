@@ -19,5 +19,6 @@
     <string name="today">Today</string>
     <string name="clever">Clever</string>
     <string name="slash">/</string>
+    <string name="unit">°</string>
 
 </resources>
