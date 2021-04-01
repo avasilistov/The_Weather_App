@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,10 @@ import com.demo.theweather.mvvm.WeatherViewModel;
 import com.demo.theweather.network.pojo.Hour;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.demo.theweather.network.NetworkClient.PATH;
 
 
 public class HourlyFragment extends Fragment {
@@ -65,6 +69,24 @@ public class HourlyFragment extends Fragment {
         {
 //            if (cityName != null) txtCityName.setText(cityName);
         });
+    }
+
+    private List<Hour> addIconPathHour(List<Hour> hourList){
+        ArrayList<Hour> tempList = new ArrayList<>();
+        String tempPath = "";
+        for (Hour hour : hourList) {
+            tempPath = hour.getWeatherIcon();
+            if (Integer.valueOf(tempPath) < 10) {
+
+                tempPath = PATH + "0" + tempPath + "-s.png";
+            } else {
+                tempPath = PATH + tempPath + "-s.png";
+            }
+            Log.i(TAG, "setWeatherIcon: " + tempPath);
+            hour.setWeatherIcon(tempPath);
+            tempList.add(hour);
+        }
+        return tempList;
     }
 
     public void onError() {

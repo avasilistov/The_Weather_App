@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -81,7 +82,10 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         swipeRefreshLayout = findViewById(R.id.swiperefresh);
-        weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
+//        weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
+        weatherViewModel = new ViewModelProvider(this,
+                new SavedStateViewModelFactory(getApplication(), this))
+                .get(WeatherViewModel.class);
         viewPager = findViewById(R.id.pager);
         pagerAdapter = new PAdapter(this);
         viewPager.setAdapter(pagerAdapter);
@@ -120,6 +124,15 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onRefresh() {
                 checkPermissions();
+            }
+        });
+// Подписываемся на изменение location
+        weatherViewModel.getLocation().observe(this, location -> {
+            Log.i(TAG, "observe" + location);
+            if (location != null) {
+                // передаем locationKey
+                weatherViewModel.setQueryWeather(location.get(0));
+                Log.i(TAG, "onCreate: "+location.get(0)+location.get(1));
             }
         });
 
@@ -176,7 +189,6 @@ public class MainActivity extends AppCompatActivity  {
 
     @SuppressLint("MissingPermission")
     private void requestLocation() {
-        Log.i(TAG, "requestLocation: start requesting location");
         fusedLocationClient.getCurrentLocation(PRIORITY_HIGH_ACCURACY, cancellationTokenSource.getToken())
                 .addOnCompleteListener(task -> {
 
@@ -189,7 +201,11 @@ public class MainActivity extends AppCompatActivity  {
                         preferences.edit().putString("location", stringLocation).commit();
 
                         // start recieving weather data
-                        weatherViewModel.setCoordinates(stringLocation);
+                        Log.i(TAG, "requestLocation: "+location);
+
+                        // Передаем координаты для получения locationKey
+                        weatherViewModel.setQueryLocation(stringLocation);
+
 
                     } else {
                         makeToast(R.string.cant_determine_location_fused);

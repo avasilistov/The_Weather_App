@@ -2,6 +2,7 @@ package com.demo.theweather.model;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.demo.theweather.network.NetworkClient;
@@ -23,12 +24,24 @@ public class WeatherRepository {
     private static final String TAG = "WeatherRepository";
     private static final String IS_METRIC = "true";
     private WeatherService apiService = NetworkClient.getClient().create(WeatherService.class);
-    private MutableLiveData<List<String>> locationData;
-    private MutableLiveData<List<DailyForecast>> dailyData;
-    private MutableLiveData<List<Hour>> hourlyData;
+    private MutableLiveData<List<String>> locationData = new MutableLiveData<>();
+    private MutableLiveData<List<DailyForecast>> dailyData = new MutableLiveData<>();
+    private MutableLiveData<List<Hour>> hourlyData = new MutableLiveData<>();
 
 
-    public void getData(String location) {
+    public MutableLiveData<List<String>> getLocationData() {
+        return locationData;
+    }
+
+    public MutableLiveData<List<DailyForecast>> getDailyData(List<String> list) {
+        return dailyData;
+    }
+
+    public MutableLiveData<List<Hour>> getHourlyData() {
+        return hourlyData;
+    }
+
+    public LiveData<List<String>> getData(String location) {
         Call<City> call = apiService.searchCity(NetworkClient.API_KEY, location);
         call.enqueue(new retrofit2.Callback<City>() {
 
@@ -40,9 +53,8 @@ public class WeatherRepository {
                     String locationKey = response.body().getKey();
                     String cityName = response.body().getLocalizedName();
                     Log.i(TAG, "onResponse: "+cityName);
-                    locationData.setValue(Arrays.asList(locationKey, cityName));
-                    getDailyList(locationData.getValue().get(0));
-                    getHourlyList(locationData.getValue().get(0));
+                    locationData.postValue(Arrays.asList(locationKey, cityName));
+
                 }
 
             }
@@ -54,10 +66,11 @@ public class WeatherRepository {
 
         });
 
+        return locationData;
     }
 
 
-    public void getDailyList(String locationKey) {
+    public LiveData<List<DailyForecast>> getDailyList(String locationKey) {
         Call<DailyForecastList> call = apiService.getDays(locationKey, NetworkClient.API_KEY, IS_METRIC);
 
         call.enqueue(new retrofit2.Callback<DailyForecastList>() {
@@ -65,7 +78,7 @@ public class WeatherRepository {
             public void onResponse(Call<DailyForecastList> call, Response<DailyForecastList> response) {
                 Log.i(TAG, "onResponse: "+ response.body());
                 if (response.isSuccessful() && response.body() != null ) {
-                    dailyData.setValue(response.body().getDailyForecasts());
+                    dailyData.postValue(response.body().getDailyForecasts());
                 }
 
             }
@@ -77,10 +90,11 @@ public class WeatherRepository {
                 t.printStackTrace();
             }
         });
+        return dailyData;
 
     }
 
-    public void getHourlyList(String locationKey) {
+    public LiveData<List<Hour>> getHourlyList(String locationKey) {
         Call<List<Hour>> call = apiService.getHours(locationKey, NetworkClient.API_KEY, IS_METRIC);
 
         call.enqueue(new retrofit2.Callback<List<Hour>>() {
@@ -88,7 +102,7 @@ public class WeatherRepository {
             public void onResponse(Call<List<Hour>> call, Response<List<Hour>> response) {
 
                 if (response.isSuccessful() && response.body() != null ) {
-                   hourlyData.setValue(response.body());
+                   hourlyData.postValue(response.body());
                 }
 
             }
@@ -99,6 +113,7 @@ public class WeatherRepository {
                 t.printStackTrace();
             }
         });
+        return hourlyData;
 
     }
 }

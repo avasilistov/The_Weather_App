@@ -11,6 +11,7 @@ import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,10 @@ import com.demo.theweather.mvvm.WeatherViewModel;
 import com.demo.theweather.network.pojo.DailyForecast;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.demo.theweather.network.NetworkClient.PATH;
 
 
 public class DailyFragment extends Fragment {
@@ -62,7 +66,9 @@ public class DailyFragment extends Fragment {
 
 
         weatherViewModel.getListDailyWeather().observe(getViewLifecycleOwner(), dailyForecasts -> {
+            Log.i(TAG, "observe: getListDailyWeather "+ dailyForecasts);
             if (dailyForecasts != null) {
+                dailyForecasts = addIconPathDay(dailyForecasts);
                 DailyRecyclerAdapter adapter = new DailyRecyclerAdapter(dailyForecasts, getContext());
                 txtDailyFragmCenter.setText(dailyForecasts.get(0).getTemperature().getMaximum().getValue());
                 recyclerView.setAdapter(adapter);
@@ -70,12 +76,36 @@ public class DailyFragment extends Fragment {
         });
 
 
-        weatherViewModel.getLocation().observe(getViewLifecycleOwner(), cityName ->
+        weatherViewModel.getLocation().observe(getViewLifecycleOwner(), locationData ->
         {
-            if (cityName != null) txtCityName.setText(cityName);
+            Log.i(TAG, "getLocation().observe: "+ locationData);
+            if (!locationData.isEmpty()) txtCityName.setText(locationData.get(1));
         });
 
 
+    }
+
+    private List<DailyForecast> addIconPathDay(List<DailyForecast> hourList){
+        ArrayList<DailyForecast> tempList = new ArrayList<>();
+        String tempPathDay = "";
+        String tempPathNight = "";
+        for (DailyForecast day : hourList) {
+            tempPathDay = day.getDay().getIcon();
+            tempPathNight = day.getNight().getIcon();
+            if (Integer.valueOf(tempPathDay) < 10) {
+
+                tempPathDay = PATH + "0" + tempPathDay + "-s.png";
+                tempPathNight = PATH + "0" + tempPathNight + "-s.png";
+            } else {
+                tempPathDay = PATH + tempPathDay + "-s.png";
+                tempPathNight = PATH + tempPathNight + "-s.png";
+            }
+
+            day.getDay().setIcon(tempPathDay);
+            day.getNight().setIcon(tempPathNight);
+            tempList.add(day);
+        }
+        return tempList;
     }
 
 
