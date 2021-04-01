@@ -39,7 +39,7 @@ import com.google.android.material.snackbar.Snackbar;
 import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
 
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
     private NetworkCallback networkCallback;
     private static final String TAG = "MainActivity1";
     private ConnectivityManager connectivityManager;
@@ -50,9 +50,7 @@ public class MainActivity extends AppCompatActivity  {
     private CancellationTokenSource cancellationTokenSource;
     private SharedPreferences preferences;
     private ViewPager2 viewPager;
-    private FragmentStateAdapter pagerAdapter;
     private WeatherViewModel weatherViewModel;
-    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     private final ActivityResultLauncher<Intent> gpsActivityResultLauncher =
@@ -81,13 +79,13 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        swipeRefreshLayout = findViewById(R.id.swiperefresh);
+        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swiperefresh);
 //        weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
         weatherViewModel = new ViewModelProvider(this,
                 new SavedStateViewModelFactory(getApplication(), this))
                 .get(WeatherViewModel.class);
         viewPager = findViewById(R.id.pager);
-        pagerAdapter = new PAdapter(this);
+        FragmentStateAdapter pagerAdapter = new PAdapter(this);
         viewPager.setAdapter(pagerAdapter);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         cancellationTokenSource = new CancellationTokenSource();
@@ -128,11 +126,9 @@ public class MainActivity extends AppCompatActivity  {
         });
 // Подписываемся на изменение location
         weatherViewModel.getLocation().observe(this, location -> {
-            Log.i(TAG, "observe" + location);
             if (location != null) {
                 // передаем locationKey
                 weatherViewModel.setQueryWeather(location.get(0));
-                Log.i(TAG, "onCreate: "+location.get(0)+location.get(1));
             }
         });
 
@@ -175,7 +171,6 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-
     private void turnOnGps() {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.enable_gps)
@@ -194,17 +189,9 @@ public class MainActivity extends AppCompatActivity  {
 
                     if (task.isSuccessful() && task.getResult() != null) {
                         Location location = task.getResult();
-                        preferences = getSharedPreferences("location", MODE_PRIVATE);
-                        String stringLocation = location.getLatitude() +
-                                "," +
-                                location.getLongitude();
-                        preferences.edit().putString("location", stringLocation).commit();
-
-                        // start recieving weather data
-                        Log.i(TAG, "requestLocation: "+location);
 
                         // Передаем координаты для получения locationKey
-                        weatherViewModel.setQueryLocation(stringLocation);
+                        weatherViewModel.setQueryLocation(location.getLatitude() + "," + location.getLongitude());
 
 
                     } else {

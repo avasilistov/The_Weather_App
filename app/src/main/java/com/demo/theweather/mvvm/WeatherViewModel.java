@@ -34,6 +34,7 @@ public class WeatherViewModel extends ViewModel {
     }
 
     public void setQueryWeather(String locationKey){
+        Log.i(TAG, "setQueryWeather: "+locationKey);
         savedStateHandle.set(DAILY_KEY, locationKey);
         savedStateHandle.set(HOURLY_KEY, locationKey);
     }

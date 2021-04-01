@@ -2,6 +2,7 @@ package com.demo.theweather.model;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -23,30 +24,19 @@ import retrofit2.Response;
 public class WeatherRepository {
     private static final String TAG = "WeatherRepository";
     private static final String IS_METRIC = "true";
-    private WeatherService apiService = NetworkClient.getClient().create(WeatherService.class);
-    private MutableLiveData<List<String>> locationData = new MutableLiveData<>();
-    private MutableLiveData<List<DailyForecast>> dailyData = new MutableLiveData<>();
-    private MutableLiveData<List<Hour>> hourlyData = new MutableLiveData<>();
+    private final WeatherService apiService = NetworkClient.getClient().create(WeatherService.class);
+    private final MutableLiveData<List<String>> locationData = new MutableLiveData<>();
+    private final MutableLiveData<List<DailyForecast>> dailyData = new MutableLiveData<>();
+    private final MutableLiveData<List<Hour>> hourlyData = new MutableLiveData<>();
 
 
-    public MutableLiveData<List<String>> getLocationData() {
-        return locationData;
-    }
-
-    public MutableLiveData<List<DailyForecast>> getDailyData(List<String> list) {
-        return dailyData;
-    }
-
-    public MutableLiveData<List<Hour>> getHourlyData() {
-        return hourlyData;
-    }
 
     public LiveData<List<String>> getData(String location) {
         Call<City> call = apiService.searchCity(NetworkClient.API_KEY, location);
         call.enqueue(new retrofit2.Callback<City>() {
 
             @Override
-            public void onResponse(Call<City> call, Response<City> response) {
+            public void onResponse(@NonNull Call<City> call, @NonNull Response<City> response) {
 
 
                 if (response.isSuccessful() && response.body() != null ) {
@@ -60,7 +50,7 @@ public class WeatherRepository {
             }
 
             @Override
-            public void onFailure(Call<City> call, Throwable t) {
+            public void onFailure(@NonNull Call<City> call, @NonNull Throwable t) {
                 t.printStackTrace();
             }
 
@@ -71,11 +61,13 @@ public class WeatherRepository {
 
 
     public LiveData<List<DailyForecast>> getDailyList(String locationKey) {
+        Log.i(TAG, "getDailyList: "+locationKey);
         Call<DailyForecastList> call = apiService.getDays(locationKey, NetworkClient.API_KEY, IS_METRIC);
 
         call.enqueue(new retrofit2.Callback<DailyForecastList>() {
+
             @Override
-            public void onResponse(Call<DailyForecastList> call, Response<DailyForecastList> response) {
+            public void onResponse(@NonNull Call<DailyForecastList> call, @NonNull Response<DailyForecastList> response) {
                 Log.i(TAG, "onResponse: "+ response.body());
                 if (response.isSuccessful() && response.body() != null ) {
                     dailyData.postValue(response.body().getDailyForecasts());
@@ -84,9 +76,8 @@ public class WeatherRepository {
             }
 
             @Override
-            public void onFailure(Call<DailyForecastList> call, Throwable t) {
+            public void onFailure(@NonNull Call<DailyForecastList> call, Throwable t) {
                 Log.i(TAG, "onFailure: ");
-                Log.i(TAG, "onFailure: "+call.request().url());
                 t.printStackTrace();
             }
         });
@@ -95,11 +86,12 @@ public class WeatherRepository {
     }
 
     public LiveData<List<Hour>> getHourlyList(String locationKey) {
+        Log.i(TAG, "getHourlyList: "+locationKey);
         Call<List<Hour>> call = apiService.getHours(locationKey, NetworkClient.API_KEY, IS_METRIC);
 
         call.enqueue(new retrofit2.Callback<List<Hour>>() {
             @Override
-            public void onResponse(Call<List<Hour>> call, Response<List<Hour>> response) {
+            public void onResponse(@NonNull Call<List<Hour>> call, @NonNull Response<List<Hour>> response) {
 
                 if (response.isSuccessful() && response.body() != null ) {
                    hourlyData.postValue(response.body());
@@ -108,7 +100,7 @@ public class WeatherRepository {
             }
 
             @Override
-            public void onFailure(Call<List<Hour>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Hour>> call, Throwable t) {
 
                 t.printStackTrace();
             }
